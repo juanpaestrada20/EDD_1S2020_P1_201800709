@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/Practica1.dir/ListaDobleEnlazada.cpp.obj"
   "CMakeFiles/Practica1.dir/main.cpp.obj"
   "Practica1.exe"
   "Practica1.exe.manifest"
