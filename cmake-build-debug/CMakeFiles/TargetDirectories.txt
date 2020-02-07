@@ -1,0 +1,3 @@
+D:/juanp/Documents/USAC/5to. Semestre/Estructuras de Datos/Laboratorio/Practica1/cmake-build-debug/CMakeFiles/Practica1.dir
+D:/juanp/Documents/USAC/5to. Semestre/Estructuras de Datos/Laboratorio/Practica1/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/juanp/Documents/USAC/5to. Semestre/Estructuras de Datos/Laboratorio/Practica1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
