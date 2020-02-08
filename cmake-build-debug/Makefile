@@ -122,6 +122,33 @@ Practica1/fast:
 	$(MAKE) -f CMakeFiles\Practica1.dir\build.make CMakeFiles/Practica1.dir/build
 .PHONY : Practica1/fast
 
+ListaDobleEnlazada.obj: ListaDobleEnlazada.cpp.obj
+
+.PHONY : ListaDobleEnlazada.obj
+
+# target to build an object file
+ListaDobleEnlazada.cpp.obj:
+	$(MAKE) -f CMakeFiles\Practica1.dir\build.make CMakeFiles/Practica1.dir/ListaDobleEnlazada.cpp.obj
+.PHONY : ListaDobleEnlazada.cpp.obj
+
+ListaDobleEnlazada.i: ListaDobleEnlazada.cpp.i
+
+.PHONY : ListaDobleEnlazada.i
+
+# target to preprocess a source file
+ListaDobleEnlazada.cpp.i:
+	$(MAKE) -f CMakeFiles\Practica1.dir\build.make CMakeFiles/Practica1.dir/ListaDobleEnlazada.cpp.i
+.PHONY : ListaDobleEnlazada.cpp.i
+
+ListaDobleEnlazada.s: ListaDobleEnlazada.cpp.s
+
+.PHONY : ListaDobleEnlazada.s
+
+# target to generate assembly for a file
+ListaDobleEnlazada.cpp.s:
+	$(MAKE) -f CMakeFiles\Practica1.dir\build.make CMakeFiles/Practica1.dir/ListaDobleEnlazada.cpp.s
+.PHONY : ListaDobleEnlazada.cpp.s
+
 main.obj: main.cpp.obj
 
 .PHONY : main.obj
@@ -158,6 +185,9 @@ help:
 	@echo ... Practica1
 	@echo ... edit_cache
 	@echo ... rebuild_cache
+	@echo ... ListaDobleEnlazada.obj
+	@echo ... ListaDobleEnlazada.i
+	@echo ... ListaDobleEnlazada.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
