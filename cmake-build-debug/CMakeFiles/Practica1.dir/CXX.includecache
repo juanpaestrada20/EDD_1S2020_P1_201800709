@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/juanpa/CLionProjects/Practica1/ListaDobleEnlazada.h
+
+/home/juanpa/CLionProjects/Practica1/main.cpp
+iostream
+-
+stdlib.h
+-
+ncurses.h
+-
+ListaDobleEnlazada.h
+/home/juanpa/CLionProjects/Practica1/ListaDobleEnlazada.h
+

@@ -1,7 +1,10 @@
 #include <iostream>
+#include <stdlib.h>
+#include <ncurses.h>
 #include "ListaDobleEnlazada.h"
 using namespace std;
 
+void crearArchivo();
 void menu();
 
 int main() {
@@ -9,23 +12,74 @@ int main() {
     return 0;
 }
 
-void menu() {
-    int opcion;
-    do{
-        cout << "\tUNIVERSIDAD SAN CARLOS DE GUATEMALA" << endl;
-        cout << "\tFACULTAD DE INGENIERIA" << endl;
-        cout << "\tESTRUCTURAS DE DATOS" << endl;
-        cout << "\tPRACTICA 1" << endl;
-        cout << "\tJUAN PABLO ESTRADA ALEMAN" << endl;
-        cout << "\t201800709" << endl;
-        cout << "\n" << endl;
-        cout << "\t\tMENU" << endl;
-        cout << "1. Crear Archivo" << endl;
-        cout << "2. Abrir Archivo" << endl;
-        cout << "3. Archivos Recientes" << endl;
-        cout << "4. Salir" << endl;
+void menu(){
+    initscr();
+    noecho();
+    cbreak();
 
-        cin >> opcion;
+    int y, x;
+    getmaxyx(stdscr, y, x);
 
-    }while (opcion != 4);
+    WINDOW *menu = newwin(20,x,0,0);
+    box(menu, 0,0);
+    refresh();
+    wrefresh(menu);
+    keypad(menu, true);
+
+    string opciones[4] = {"1. Crear Archivo", "2. Abrir Archivo", "3. Archivos Recientes", "4. Salir"};
+    string cabecera[8] = {"UNIVERSIDAD SAN CARLOS DE GUATEMALA", "FACULTAD DE INGENIERIA", "ESTRUCTURAS DE DATOS", "PARCTICA 1",
+                          "JUAN PABLO ESTRADA ALEMAN", "2018000709", "", "MENU"};
+
+    int option;
+    int highlight = 8;
+
+    while (wgetch(menu) != 52){
+        for(int i = 0; i < 12; i++){
+            if(i == highlight){
+                wattron(menu, A_REVERSE);
+            }
+            wattroff(menu, A_REVERSE);
+            if (i<8){
+                mvwprintw(menu, i+1, 1, cabecera[i].c_str());
+            }else {
+                mvwprintw(menu, i+1, 1, opciones[i-8].c_str());
+            }
+        }
+
+        option = wgetch(menu);
+        switch (option){
+            case KEY_UP:
+                highlight = highlight - 1;
+                if (highlight == 7){
+                    highlight=12;
+                }
+                break;
+            case KEY_DOWN:
+                highlight = highlight + 1;
+                if(highlight == 13){
+                    highlight=8;
+                }
+                break;
+            default:
+                break;
+        }
+        if(option == '1'){
+            crearArchivo();
+        }
+    }
+    wrefresh(menu);
+    getch();
+    delwin(menu);
+    endwin();
+}
+
+void crearArchivo() {
+    int y, x;
+    getmaxyx(stdscr, y, x);
+
+    WINDOW *archivo = newwin(20,x,0,0);
+    box(archivo, 0,0);
+    refresh();
+    wrefresh(archivo);
+    keypad(archivo, true);
 }
