@@ -1,4 +1,13 @@
+<<<<<<< Updated upstream
 "D:\JetBrains\CLion 2019.3.3\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" "D:\juanp\Documents\USAC\5to. Semestre\Estructuras de Datos\Laboratorio\Practica1"
 -- Configuring done
 -- Generating done
 -- Build files have been written to: D:/juanp/Documents/USAC/5to. Semestre/Estructuras de Datos/Laboratorio/Practica1/cmake-build-debug
+=======
+/home/juanpa/Documentos/clion-2019.3.3/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/juanpa/CLionProjects/Practica1
+CMake Error: CMake was unable to find a build program corresponding to "Unix Makefiles".  CMAKE_MAKE_PROGRAM is not set.  You probably need to select a different build tool.
+CMake Error: CMAKE_C_COMPILER not set, after EnableLanguage
+CMake Error: CMAKE_CXX_COMPILER not set, after EnableLanguage
+-- Configuring incomplete, errors occurred!
+See also "/home/juanpa/CLionProjects/Practica1/cmake-build-debug/CMakeFiles/CMakeOutput.log".
+>>>>>>> Stashed changes
