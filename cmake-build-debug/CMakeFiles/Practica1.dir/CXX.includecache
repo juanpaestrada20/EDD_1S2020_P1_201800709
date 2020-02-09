@@ -6,7 +6,15 @@
 
 #IncludeRegexTransform: 
 
-D:/juanp/Documents/USAC/5to. Semestre/Estructuras de Datos/Laboratorio/Practica1/main.cpp
+/home/juanpa/CLionProjects/Practica1/ListaDobleEnlazada.h
+
+/home/juanpa/CLionProjects/Practica1/main.cpp
 iostream
 -
+stdlib.h
+-
+ncurses.h
+-
+ListaDobleEnlazada.h
+/home/juanpa/CLionProjects/Practica1/ListaDobleEnlazada.h
 
