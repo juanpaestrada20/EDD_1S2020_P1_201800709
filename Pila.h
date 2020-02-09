@@ -10,9 +10,7 @@ using namespace std;
 class Cambio{
 public:
     Cambio(long i) {
-
     }
-
     string palabraBuscada;
     string palabraReemplazada;
     bool estado;
