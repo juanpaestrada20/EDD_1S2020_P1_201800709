@@ -126,6 +126,9 @@ public:
             size--;
         }
     }
+    bool isEmpty(){
+        return (cabeza == NULL);
+    }
 };
 
 

@@ -87,6 +87,9 @@
 		<Unit filename="/home/juanpa/CLionProjects/Practica1/ListaDobleEnlazada.h">
 			<Option target="Practica1"/>
 		</Unit>
+		<Unit filename="/home/juanpa/CLionProjects/Practica1/Pila.h">
+			<Option target="Practica1"/>
+		</Unit>
 		<Unit filename="/home/juanpa/CLionProjects/Practica1/main.cpp">
 			<Option target="Practica1"/>
 		</Unit>
