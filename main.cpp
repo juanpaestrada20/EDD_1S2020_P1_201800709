@@ -33,12 +33,12 @@ void menu(){
     int option;
     int highlight = 8;
 
-    while (wgetch(menu) != 52){
+    while (wgetch(menu) != '4'){
         for(int i = 0; i < 12; i++){
             if(i == highlight){
-                wattron(menu, A_REVERSE);
+                wattron(menu, A_STANDOUT);
             }
-            wattroff(menu, A_REVERSE);
+            wattroff(menu, A_STANDOUT);
             if (i<8){
                 mvwprintw(menu, i+1, 1, cabecera[i].c_str());
             }else {
@@ -74,6 +74,10 @@ void menu(){
 }
 
 void crearArchivo() {
+    initscr();
+    noecho();
+    cbreak();
+
     int y, x;
     getmaxyx(stdscr, y, x);
 
@@ -82,4 +86,8 @@ void crearArchivo() {
     refresh();
     wrefresh(archivo);
     keypad(archivo, true);
+
+    getch();
+    delwin(archivo);
+    endwin();
 }
