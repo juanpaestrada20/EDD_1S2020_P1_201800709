@@ -84,6 +84,9 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/home/juanpa/CLionProjects/Practica1/ListaCircular.h">
+			<Option target="Practica1"/>
+		</Unit>
 		<Unit filename="/home/juanpa/CLionProjects/Practica1/ListaDobleEnlazada.h">
 			<Option target="Practica1"/>
 		</Unit>
