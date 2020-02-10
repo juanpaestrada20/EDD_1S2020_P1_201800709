@@ -14,7 +14,6 @@ int main() {
 
 void menu(){
     initscr();
-    noecho();
     cbreak();
 
     int y, x;
@@ -75,7 +74,6 @@ void menu(){
 
 void crearArchivo() {
     initscr();
-    noecho();
     cbreak();
 
     int y, x;
@@ -87,7 +85,22 @@ void crearArchivo() {
     wrefresh(archivo);
     keypad(archivo, true);
 
-    getch();
-    delwin(archivo);
+    int columna = 1;
+    int fila = 1;
+
+    int contCaracteres = 0;
+    move(fila, columna);
+    while (wgetch(archivo) != 24){
+        char letra = getch();
+        mvwprintw(archivo, fila, columna, "%c", letra);
+        if(wgetch(archivo) == 32){
+            columna++;
+        }else if(wgetch(archivo) == 13){
+            fila++;
+            columna = 1;
+        }
+        columna++;
+    }
+
     endwin();
 }
