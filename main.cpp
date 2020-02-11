@@ -7,6 +7,8 @@ using namespace std;
 void crearArchivo();
 void menu();
 
+static ListaDobleEnlazada *listaCaracteres = new ListaDobleEnlazada();
+
 int main() {
     menu();
     return 0;
@@ -14,6 +16,7 @@ int main() {
 
 void menu(){
     initscr();
+    noecho();
     cbreak();
 
     int y, x;
@@ -32,20 +35,20 @@ void menu(){
     int option;
     int highlight = 8;
 
-    while (wgetch(menu) != '4'){
-        for(int i = 0; i < 12; i++){
-            if(i == highlight){
-                wattron(menu, A_STANDOUT);
-            }
-            wattroff(menu, A_STANDOUT);
-            if (i<8){
-                mvwprintw(menu, i+1, 1, cabecera[i].c_str());
-            }else {
-                mvwprintw(menu, i+1, 1, opciones[i-8].c_str());
-            }
+    for(int i = 0; i < 12; i++){
+        if(i == highlight){
+            wattron(menu, A_STANDOUT);
         }
+        wattroff(menu, A_STANDOUT);
+        if (i<8){
+            mvwprintw(menu, i+1, 1, cabecera[i].c_str());
+        }else {
+            mvwprintw(menu, i+1, 1, opciones[i-8].c_str());
+        }
+    }
+    while (wgetch(menu) != '4'){
 
-        option = wgetch(menu);
+        option = getch();
         switch (option){
             case KEY_UP:
                 highlight = highlight - 1;
@@ -59,21 +62,19 @@ void menu(){
                     highlight=8;
                 }
                 break;
-            default:
-                break;
         }
         if(option == '1'){
+            clear();
             crearArchivo();
         }
     }
-    wrefresh(menu);
-    getch();
     delwin(menu);
     endwin();
 }
 
 void crearArchivo() {
     initscr();
+    echo();
     cbreak();
 
     int y, x;
@@ -84,23 +85,36 @@ void crearArchivo() {
     refresh();
     wrefresh(archivo);
     keypad(archivo, true);
+    string instrucciones = "^w (Buscar y Remplazar)   ^c(Reportes)    ^s (Salir)";
+    mvwprintw(archivo, 21, x, "%c", instrucciones.c_str());
 
     int columna = 1;
     int fila = 1;
 
     int contCaracteres = 0;
     move(fila, columna);
-    while (wgetch(archivo) != 24){
-        char letra = getch();
-        mvwprintw(archivo, fila, columna, "%c", letra);
-        if(wgetch(archivo) == 32){
-            columna++;
-        }else if(wgetch(archivo) == 13){
-            fila++;
-            columna = 1;
+    //^X
+    while (getch() != 24){
+        int acsii = getch();
+        char letra = acsii;
+        switch (acsii){
+            case KEY_UP:
+            case KEY_DOWN:
+            case 27:
+                break;
+            case 13:
+                fila++;
+                move(fila, columna);
+                refresh();
+            default:
+                mvwprintw(archivo, fila, columna, "%c", acsii);
+                refresh();
+                listaCaracteres->agregarInicio(letra);
+                columna++;
         }
-        columna++;
     }
 
+    delwin(archivo);
     endwin();
+    menu();
 }

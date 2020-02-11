@@ -4,6 +4,7 @@
 
 #ifndef PRACTICA1_LISTADOBLEENLAZADA_H
 #define PRACTICA1_LISTADOBLEENLAZADA_H
+using namespace std;
 
 class Nodo{
 public:
@@ -128,6 +129,21 @@ public:
     }
     bool isEmpty(){
         return (cabeza == NULL);
+    }
+    void mostrarDatos(){
+        if(isEmpty()){
+            return;
+        }else{
+            Nodo *aux = cabeza;
+            for(int i  = 0; i < size; i++){
+                cout << aux->letra;
+                if(aux->next != NULL){
+                    cout << " -> ";
+                }
+                aux = aux->next;
+            }
+            cout << endl;
+        }
     }
 };
 
