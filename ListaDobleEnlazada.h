@@ -37,7 +37,7 @@ public:
     void agregarFin(char letra){
         Nodo *nuevo = new Nodo(letra);
 
-        if(cabeza==NULL){
+        if(cabeza == NULL){
             cabeza = nuevo;
             cola = nuevo;
         }
@@ -145,6 +145,11 @@ public:
                 aux = aux->next;
             }
             cout << endl;
+        }
+    }
+    void limpiarLista(){
+        while(!isEmpty()){
+            eliminarPrimero();
         }
     }
     void generarGrafo(){

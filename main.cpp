@@ -1,5 +1,5 @@
 #include <iostream>
-#include <stdlib.h>
+#include <stdio.h>
 #include <ncurses.h>
 #include "ListaDobleEnlazada.h"
 using namespace std;
@@ -86,7 +86,7 @@ void crearArchivo() {
     wrefresh(archivo);
     keypad(archivo, true);
     string instrucciones = "^w (Buscar y Remplazar)   ^c(Reportes)    ^s (Salir)";
-    mvwprintw(archivo, 21, x, "%c", instrucciones.c_str());
+    mvwprintw(archivo, 21, 0, "%c", instrucciones.c_str());
     refresh();
 
     int columna = 1;
@@ -95,26 +95,32 @@ void crearArchivo() {
     int contCaracteres = 0;
     move(fila, columna);
     //^X
-    while (wgetch(archivo) != 24){
-        int acsii = wgetch();
+    while (getch() != 19){
+        int acsii = getch();
         char letra = acsii;
         switch (acsii){
             case KEY_UP:
             case KEY_DOWN:
-            case 27:
+            case KEY_LEFT:
+            case KEY_RIGHT:
+            case KEY_MOUSE:
+                break;
+            case 3:
+            case 18:
                 listaCaracteres->generarGrafo();
                 break;
             case 13:
                 fila++;
                 move(fila, columna);
             default:
-                listaCaracteres->agregarFin(letra);
                 mvwprintw(archivo, fila, columna, "%c", letra);
-
+                listaCaracteres->agregarFin(letra);
                 columna++;
         }
     }
 
+    clear();
+    listaCaracteres->limpiarLista();
     delwin(archivo);
     endwin();
     menu();
