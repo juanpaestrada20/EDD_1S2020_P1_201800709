@@ -1,0 +1,21 @@
+digraph G {
+{ 
+ rankdir = "LR";
+node [margin=0 shape=oval style=filled];
+B [label="null"];
+A1 [label="b"];
+A2 [label="d"];
+A3 [label="g"];
+A4 [label=" "];
+A5 [label=" "];
+A6 [label=" "];
+C [label="null"];
+}
+B -> A1 [dir=both];
+A1 -> A2 [dir=both];
+A2 -> A3 [dir=both];
+A3 -> A4 [dir=both];
+A4 -> A5 [dir=both];
+A5 -> A6 [dir=both];
+A6 -> C [dir=both];
+}

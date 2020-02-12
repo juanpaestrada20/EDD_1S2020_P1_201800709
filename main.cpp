@@ -87,6 +87,7 @@ void crearArchivo() {
     keypad(archivo, true);
     string instrucciones = "^w (Buscar y Remplazar)   ^c(Reportes)    ^s (Salir)";
     mvwprintw(archivo, 21, x, "%c", instrucciones.c_str());
+    refresh();
 
     int columna = 1;
     int fila = 1;
@@ -94,22 +95,22 @@ void crearArchivo() {
     int contCaracteres = 0;
     move(fila, columna);
     //^X
-    while (getch() != 24){
-        int acsii = getch();
+    while (wgetch(archivo) != 24){
+        int acsii = wgetch();
         char letra = acsii;
         switch (acsii){
             case KEY_UP:
             case KEY_DOWN:
             case 27:
+                listaCaracteres->generarGrafo();
                 break;
             case 13:
                 fila++;
                 move(fila, columna);
-                refresh();
             default:
-                mvwprintw(archivo, fila, columna, "%c", acsii);
-                refresh();
-                listaCaracteres->agregarInicio(letra);
+                listaCaracteres->agregarFin(letra);
+                mvwprintw(archivo, fila, columna, "%c", letra);
+
                 columna++;
         }
     }
