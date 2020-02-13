@@ -74,54 +74,93 @@ void menu(){
 
 void crearArchivo() {
     initscr();
-    echo();
-    cbreak();
+    noecho();
+    raw();
 
     int y, x;
     getmaxyx(stdscr, y, x);
-
-    WINDOW *archivo = newwin(20,x,0,0);
-    box(archivo, 0,0);
-    refresh();
-    wrefresh(archivo);
-    keypad(archivo, true);
+    keypad(stdscr, true);
     string instrucciones = "^w (Buscar y Remplazar)   ^c(Reportes)    ^s (Salir)";
-    mvwprintw(archivo, 21, 0, "%c", instrucciones.c_str());
     refresh();
 
-    int columna = 1;
-    int fila = 1;
+    printw(instrucciones.c_str());
+    for (int line = 0; line < x; line++){
+        mvprintw(1,line,"_");
+        refresh();
+    }
+
+    int columna = 0;
+    int fila = 3;
 
     int contCaracteres = 0;
     move(fila, columna);
-    //^X
-    while (getch() != 19){
-        int acsii = getch();
-        char letra = acsii;
-        switch (acsii){
-            case KEY_UP:
-            case KEY_DOWN:
-            case KEY_LEFT:
-            case KEY_RIGHT:
-            case KEY_MOUSE:
+    while (1){
+        //int acsii = getch();
+        char letra = getch();
+        if(letra==19){
+            listaCaracteres->limpiarLista();
+            break;
+        }
+        switch (letra){
+            case 1:
+            case 2:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 9:
+            case 10:
+            case 11:
+            case 12:
+            case 14:
+            case 15:
+            case 16:
+            case 17:
+            case 18:
+            case 20:
+            case 21:
+            case 22:
+            case 24:
+            case 27:
+            case 28:
+            case 29:
+            case 30:
+            case 31:
                 break;
             case 3:
-            case 18:
+                //Reportes ctrl+c
                 listaCaracteres->generarGrafo();
                 break;
+            case 8:
+                //borrar
+                break;
             case 13:
+                //enter
                 fila++;
-                move(fila, columna);
+                move(fila,columna);
+                refresh();
+                break;
+            case 25:
+                //ctrl + Y
+                break;
+            case 26:
+                //ctrl + Z
+                break;
+            case 23:
+                //busqueda
+                break;
             default:
-                mvwprintw(archivo, fila, columna, "%c", letra);
+                addch(letra);
                 listaCaracteres->agregarFin(letra);
                 columna++;
+                move(fila, columna);
+                refresh();
+                break;
         }
+        refresh();
     }
 
     clear();
     listaCaracteres->limpiarLista();
-    delwin(archivo);
-    endwin();
     menu();
 }

@@ -157,7 +157,7 @@ public:
         char letras[size];
         ofstream fs("letras.dot");
         fs << "digraph G {" << endl;
-        fs << "{ \n rankdir = LR;" << endl;
+        fs << "\nrankdir = LR;" << endl;
         fs << "node [margin=0 shape=oval style=filled ];" << endl;
         fs << "B [label=\"null\"];" << endl;
         for(int i = 0; i < size; i++){
@@ -165,10 +165,10 @@ public:
             aux = aux->next;
         }
         fs << "C [label=\"null\"];" << endl;
-        fs << "}" << endl;
+        fs << "" << endl;
         aux = cabeza;
         if(aux == cabeza && aux->next != NULL){
-            fs << "B -> A1 [dir=both];" << endl;
+            fs << "A1 -> B;" << endl;
         }else if(aux == cabeza && aux->next == NULL){
             fs << "B -> C [dir=both];"<< endl;
         }
@@ -176,7 +176,7 @@ public:
             fs << "A" << j << " -> A" << j+1 << " [dir=both];" << endl;
             aux = aux->next;
         }
-        fs << "A" << size << " -> C [dir=both];" << endl;
+        fs << "A" << size << " -> C;" << endl;
         fs << "}" << endl;
         fs.close();
 
