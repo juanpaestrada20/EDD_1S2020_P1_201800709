@@ -66,7 +66,6 @@ void crearArchivo() {
     keypad(stdscr, true);
     string instrucciones = "^w (Buscar y Remplazar)   ^c(Reportes)    ^s (Salir)";
     refresh();
-
     printw(instrucciones.c_str());
     for (int line = 0; line < x; line++){
         mvprintw(1,line,"_");
@@ -117,6 +116,7 @@ void crearArchivo() {
                 break;
             case 8:
                 //borrar
+                listaCaracteres->eliminarUltimo();
                 break;
             case 13:
                 //enter
@@ -134,10 +134,9 @@ void crearArchivo() {
                 //busqueda
                 break;
             default:
-                addch(letra);
+                mvaddch(fila, columna, letra);
                 listaCaracteres->agregarFin(letra);
                 columna++;
-                move(fila, columna);
                 refresh();
                 break;
         }

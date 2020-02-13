@@ -139,12 +139,8 @@ public:
             Nodo *aux = cabeza;
             for(int i  = 0; i < size; i++){
                 cout << aux->letra;
-                if(aux->next != NULL){
-                    cout << " -> ";
-                }
-                aux = aux->next;
             }
-            cout << endl;
+
         }
     }
     void limpiarLista(){
@@ -153,35 +149,35 @@ public:
         }
     }
     void generarGrafo(){
-        Nodo *aux = cabeza;
-        char letras[size];
-        ofstream fs("letras.dot");
-        fs << "digraph G {" << endl;
-        fs << "\nrankdir = LR;" << endl;
-        fs << "node [margin=0 shape=oval style=filled ];" << endl;
-        fs << "B [label=\"null\"];" << endl;
-        for(int i = 0; i < size; i++){
-            fs << "A" << i+1 << " [label=\"" << aux->letra << "\"];" << endl;
-            aux = aux->next;
-        }
-        fs << "C [label=\"null\"];" << endl;
-        fs << "" << endl;
-        aux = cabeza;
-        if(aux == cabeza && aux->next != NULL){
-            fs << "A1 -> B;" << endl;
-        }else if(aux == cabeza && aux->next == NULL){
-            fs << "B -> C [dir=both];"<< endl;
-        }
-        for(int j = 1; j < size; j++){
-            fs << "A" << j << " -> A" << j+1 << " [dir=both];" << endl;
-            aux = aux->next;
-        }
-        fs << "A" << size << " -> C;" << endl;
-        fs << "}" << endl;
-        fs.close();
+        if(!isEmpty()){
+            Nodo *aux = cabeza;
+            char letras[size];
+            ofstream fs("letras.dot");
+            fs << "digraph G {" << endl;
+            fs << "\nrankdir = LR;" << endl;
+            fs << "node [margin=0 shape=oval style=filled ];" << endl;
+            fs << "B [label=\"null\"];" << endl;
+            for(int i = 0; i < size; i++){
+                fs << "A" << i+1 << " [label=\"" << aux->letra << "\"];" << endl;
+                aux = aux->next;
+            }
+            fs << "C [label=\"null\"];" << endl;
+            fs << "" << endl;
+            aux = cabeza;
+            if(aux == cabeza && aux->next != NULL){
+                fs << "A1 -> B;" << endl;
+            }
+            for(int j = 1; j < size; j++){
+                fs << "A" << j << " -> A" << j+1 << " [dir=both];" << endl;
+                aux = aux->next;
+            }
+            fs << "A" << size << " -> C;" << endl;
+            fs << "}" << endl;
+            fs.close();
 
-        system("dot -Tpng letras.dot -o letras.png");
-        system("display letras.png");
+            system("dot -Tpng letras.dot -o letras.png");
+            system("display letras.png");
+        }
     }
 };
 
