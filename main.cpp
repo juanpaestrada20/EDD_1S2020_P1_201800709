@@ -33,40 +33,24 @@ void menu(){
                           "JUAN PABLO ESTRADA ALEMAN", "2018000709", "", "MENU"};
 
     int option;
-    int highlight = 8;
-
-    for(int i = 0; i < 12; i++){
-        if(i == highlight){
-            wattron(menu, A_STANDOUT);
+    while (1){
+        for(int i = 0; i < 12; i++){
+            if (i<8){
+                mvprintw( i+1, 1, cabecera[i].c_str());
+            }else {
+                mvprintw( i+1, 1, opciones[i-8].c_str());
+            }
+            refresh();
         }
-        wattroff(menu, A_STANDOUT);
-        if (i<8){
-            mvwprintw(menu, i+1, 1, cabecera[i].c_str());
-        }else {
-            mvwprintw(menu, i+1, 1, opciones[i-8].c_str());
+        if(getch() == '4'){
+            break;
         }
-    }
-    while (wgetch(menu) != '4'){
-
         option = getch();
-        switch (option){
-            case KEY_UP:
-                highlight = highlight - 1;
-                if (highlight == 7){
-                    highlight=12;
-                }
-                break;
-            case KEY_DOWN:
-                highlight = highlight + 1;
-                if(highlight == 13){
-                    highlight=8;
-                }
-                break;
-        }
         if(option == '1'){
             clear();
             crearArchivo();
         }
+        refresh();
     }
     delwin(menu);
     endwin();
