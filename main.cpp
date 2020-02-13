@@ -92,7 +92,7 @@ void crearArchivo() {
             case 6:
             case 7:
             case 9:
-            case 10:
+            case 13:
             case 11:
             case 12:
             case 14:
@@ -114,13 +114,16 @@ void crearArchivo() {
                 //Reportes ctrl+c
                 listaCaracteres->generarGrafo();
                 break;
-            case 8:
+            case 127:
                 //borrar
                 listaCaracteres->eliminarUltimo();
+                delch();
+                refresh();
                 break;
-            case 13:
+            case 10:
                 //enter
                 fila++;
+                columna = 0;
                 move(fila,columna);
                 refresh();
                 break;
