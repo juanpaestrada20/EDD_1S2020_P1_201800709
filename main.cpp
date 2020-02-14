@@ -22,7 +22,7 @@ void menu(){
     int y, x;
     getmaxyx(stdscr, y, x);
 
-    WINDOW *menu = newwin(20,x,0,0);
+    WINDOW *menu = newwin(y,x,0,0);
     box(menu, 0,0);
     refresh();
     wrefresh(menu);
@@ -60,31 +60,28 @@ void crearArchivo() {
     initscr();
     noecho();
     raw();
+    box(stdscr, 0,0);
 
     int y, x;
     getmaxyx(stdscr, y, x);
     keypad(stdscr, true);
     string instrucciones = "^w (Buscar y Remplazar)   ^c(Reportes)    ^s (Salir)";
     refresh();
-    printw(instrucciones.c_str());
-    for (int line = 0; line < x; line++){
-        mvprintw(1,line,"_");
-        refresh();
-    }
+    mvprintw(y-1, 12,instrucciones.c_str());
 
-    int columna = 0;
-    int fila = 3;
+
+    int columna = 1;
+    int fila = 1;
 
     int contCaracteres = 0;
     move(fila, columna);
     while (1){
-        //int acsii = getch();
         char letra = getch();
         if(letra==19){
             listaCaracteres->limpiarLista();
             break;
         }
-        switch (letra){
+        switch ((unsigned int)letra){
             case 1:
             case 2:
             case 4:
@@ -109,24 +106,44 @@ void crearArchivo() {
             case 29:
             case 30:
             case 31:
+            case KEY_UP:
+            case KEY_DOWN:
                 break;
             case 3:
                 //Reportes ctrl+c
                 listaCaracteres->generarGrafo();
                 break;
+            case 8:
             case 127:
                 //borrar
-                listaCaracteres->eliminarUltimo();
-                delch();
-                refresh();
+                {
+                    if(columna > 1 && columna < x-1){
+                    listaCaracteres->eliminarUltimo();
+                    mvprintw(fila, columna-1, " " );
+                    refresh();
+                    columna--;
+                    move(fila, columna);
+                    refresh();
+                    } else if(columna == 1 && fila > 1){
+                        listaCaracteres->eliminarUltimo();
+                        fila--;
+                        columna = x-1;
+                        move(fila,columna);
+                    }
                 break;
+                }
             case 10:
-                //enter
-                fila++;
-                columna = 0;
-                move(fila,columna);
-                refresh();
-                break;
+            {
+                if(fila < (y-2)){
+                    //enter
+                    fila++;
+                    columna = 1;
+                    listaCaracteres->agregarFin(' ');
+                    move(fila,columna);
+                    refresh();
+                    break;
+                }
+            }
             case 25:
                 //ctrl + Y
                 break;
@@ -135,11 +152,66 @@ void crearArchivo() {
                 break;
             case 23:
                 //busqueda
+            {
+                string remplazo = "";
+                int posy = y-2;
+                int posx = 29;
+                mvprintw(posy, 1, "Escriba palabra a remplazar:");
+                refresh();
+                while(1){
+                    char letraR = getch();
+                    if(letraR == 24){
+                        move(y-2,0);
+                        clrtoeol();
+                        move(fila, columna);
+                        break;
+                    }else if(letraR == 10){
+                        string anterior = "";
+                        int i;
+                        for(i = 0; i < remplazo.length(); i++){
+                            if(remplazo[i] == ';'){
+                                i++;
+                                break;
+                            }else{
+                                anterior += remplazo[i];
+                            }
+                        }
+                        string nuevaP = "";
+                        while(i < remplazo.length()){
+                            nuevaP += remplazo[i];
+                            i++;
+                        }
+                        mvprintw(y/2, x/2, nuevaP.c_str());
+                        break;
+                    }else if(letraR == 8){
+                        if(posx > 29 && posx < x-1){
+                            mvprintw(posy, posx-1, " " );
+                            refresh();
+                            posx--;
+                            move(fila, columna);
+                            refresh();
+                        }
+                    }else if(letraR > 19 && letraR < 126){
+                        mvaddch(posy, posx, letraR);
+                        remplazo += letraR;
+                        posx++;
+                        refresh();
+                    }
+                }
                 break;
+            }
             default:
+                if(columna == (x-1)){
+                    fila++;
+                    columna = 1;
+                    listaCaracteres->agregarFin(' ');
+                    move(fila,columna);
+                    refresh();
+                }
                 mvaddch(fila, columna, letra);
                 listaCaracteres->agregarFin(letra);
                 columna++;
+                contCaracteres++;
                 refresh();
                 break;
         }
