@@ -59,6 +59,14 @@ void menu() {
             clear();
             crearArchivo();
         }
+        if(option == '3'){
+            if(recientes->isEmpty() == true){
+                mvprintw(y/2,x/2,"vacio");
+            }
+            else{
+                recientes->generarGrafo();
+            }
+        }
         refresh();
     }
     delwin(menu);
@@ -288,6 +296,7 @@ void guardarArchivo() {
                 //enter
                 if (nombreArchivo != "") {
                     nombreArchivo += ".txt";
+                    recientes->agregarInicio(nombreArchivo);
                     listaCaracteres->guardarArchivo(nombreArchivo);
                     move(y-2, 0);
                     clrtoeol();
