@@ -2,7 +2,7 @@
 #include <ncurses.h>
 #include "ListaDobleEnlazada.h"
 #include "Pila.h"
-#include <fstream>
+#include "ListaCircular.h"
 
 
 using namespace std;
@@ -13,6 +13,7 @@ void guardarArchivo();
 
 void menu();
 
+static ListaCircular *recientes = new ListaCircular();
 static Pila *cambios = new Pila();
 static ListaDobleEnlazada *listaCaracteres = new ListaDobleEnlazada();
 
