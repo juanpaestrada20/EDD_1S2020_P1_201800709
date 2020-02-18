@@ -3,14 +3,16 @@ digraph G {
 rankdir = LR;
 node [margin=0 shape=oval style=filled ];
 B [label="null"];
-A1 [label="a"];
-A2 [label="j"];
+A1 [label="h"];
+A2 [label="o"];
 A3 [label="l"];
-A4 [label="k"];
-A5 [label="j"];
-A6 [label="l"];
-A7 [label="d"];
-A8 [label="j"];
+A4 [label="a"];
+A5 [label="
+"];
+A6 [label="c"];
+A7 [label="o"];
+A8 [label="m"];
+A9 [label="o"];
 C [label="null"];
 
 A1 -> B;
@@ -21,5 +23,6 @@ A4 -> A5 [dir=both];
 A5 -> A6 [dir=both];
 A6 -> A7 [dir=both];
 A7 -> A8 [dir=both];
-A8 -> C;
+A8 -> A9 [dir=both];
+A9 -> C;
 }

@@ -10,13 +10,11 @@ using namespace std;
 
 class Palabras{
 public:
-    Palabras(long i) {
-    }
     string palabraInicial;
     string palabraReemplazada;
-    Palabras(string palabraInicial, string palabraReemplazada){
-        this->palabraInicial = palabraInicial;
-        this->palabraReemplazada = palabraReemplazada;
+    Palabras(string inicial, string remplazo){
+        palabraInicial = inicial;
+        palabraReemplazada = remplazo;
     }
     Palabras(){}
 };
@@ -25,8 +23,8 @@ class Nodo{
 public:
     Palabras dato;
     Nodo *next;
-    Nodo(Palabras dato){
-        this->dato = NULL;
+    Nodo(Palabras nuevo){
+        dato = nuevo;
         next = NULL;
     }
 };
