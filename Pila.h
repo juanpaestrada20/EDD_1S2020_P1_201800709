@@ -7,30 +7,29 @@
 #include <string>
 using namespace std;
 
-class Cambio{
+class Cambio {
 public:
-    Cambio(long i) {
-    }
     string palabraBuscada;
     string palabraReemplazada;
     bool estado;
     string palabra;
     int posicion;
-    Cambio(string palabraBuscada, string palabraReemplazada, bool estado, string palabra, int posicion){
-        this->palabraBuscada = palabraBuscada;
-        this->palabraReemplazada = palabraReemplazada;
-        this->estado = estado;
-        this->palabra = palabra;
-        this->posicion = posicion;
+    Cambio(string buscada, string remplazo, bool state, string word, int pos){
+        palabraBuscada = buscada;
+        palabraReemplazada = remplazo;
+        estado = state;
+        palabra = word;
+        posicion = pos;
     }
     Cambio (){}
 };
 
-class Nodo{
+class NodoP{
 public:
     Cambio cambio;
-    Nodo *siguiente;
-    Nodo(Cambio change){
+    NodoP *siguiente;
+
+    NodoP(Cambio change){
         cambio = change;
         siguiente = NULL;
     }
@@ -38,7 +37,7 @@ public:
 
 class Pila {
 private:
-    Nodo *top;
+    NodoP *top;
     int size;
 public:
     Pila (){
@@ -49,7 +48,7 @@ public:
         return (top == NULL);
     }
     void agregarCambio(Cambio dato){
-        Nodo *nuevo = new Nodo(dato);
+        NodoP *nuevo = new NodoP(dato);
         if(top == NULL)
             top = nuevo;
         else {
@@ -59,18 +58,13 @@ public:
         size++;
     }
     Cambio sacarCambio(){
-        if(isEmpty()) {
-            return NULL;
-        }
-        else{
             Cambio temp = top->cambio;
-            Nodo *aux = top;
+            NodoP *aux = top;
 
             top = top->siguiente;
             delete aux;
             size--;
             return temp;
-        }
     }
     int getSize(){
         return size;
@@ -78,6 +72,15 @@ public:
     void vaciarPila(){
         while(!isEmpty())
             sacarCambio();
+    }
+    Pila girarPila(){
+        Pila *auxPila = new Pila();
+        auxPila->agregarCambio(sacarCambio());
+        return *auxPila;
+    }
+    void generarGrafo(){
+        if(!isEmpty()){
+        }
     }
 };
 

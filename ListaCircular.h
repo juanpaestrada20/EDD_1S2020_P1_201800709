@@ -8,21 +8,20 @@
 #include <string>
 using namespace std;
 
-class Nodo{
+class NodoC{
 public:
     string ruta;
-    Nodo *next;
-    Nodo(string ruta){
-        this->ruta = ruta;
+    NodoC *next;
+    NodoC(string _ruta){
+        ruta = _ruta;
         next = NULL;
-        prev = NULL;
     }
 };
 
 class ListaCircular {
 private:
-    Nodo *cabeza;
-    Nodo *cola;
+    NodoC *cabeza;
+    NodoC *cola;
     int size;
 public:
     ListaCircular(){
@@ -34,7 +33,7 @@ public:
         return (cabeza == NULL);
     }
     void agregarInicio(string ruta){
-        Nodo *nuevo = new Nodo(ruta);
+        NodoC *nuevo = new NodoC(ruta);
 
         if(isEmpty())
             return;
@@ -46,7 +45,7 @@ public:
             cabeza->next=cola;
             cola->next=cabeza;
         }else {
-            Nodo *aux = new Nodo(ruta);
+            NodoC *aux = new NodoC(ruta);
 
             cola->next = nuevo;
             nuevo->next = cabeza;
