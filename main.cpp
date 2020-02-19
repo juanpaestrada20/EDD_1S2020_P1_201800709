@@ -10,6 +10,8 @@ using namespace std;
 
 void crearArchivo();
 
+void crearArchivo2(string text);
+
 void guardarArchivo();
 
 void menu();
@@ -73,7 +75,22 @@ void menu() {
             archivosRecientes();
         }
         if(option == '4'){
-            
+            string entrada = "";
+            int posX = 29, posY = y- 2;
+            mvprintw(y-2, 1, "Ingrese nombre del archivo: ");
+            move(posY, posX);
+            while(1){
+                char letra = getch();
+                if(letra == 10){
+                    break;
+                } else {
+                    mvaddch(posY,posX,letra);
+                    entrada+=letra;
+                }
+
+            }
+            clear();
+            crearArchivo2(entrada);
         }
         refresh();
     }
@@ -98,6 +115,268 @@ void crearArchivo() {
 
     int columna = 1;
     int fila = 1;
+
+    int contCaracteres = 0;
+    move(fila, columna);
+    while (1) {
+        char letra = getch();
+        if (letra == 24) {
+            listaCaracteres->limpiarLista();
+            break;
+        }
+        switch ((unsigned int) letra) {
+            case 1:
+            case 2:
+            case 4:
+            case 5:
+            case 6:
+            case 9:
+            case 13:
+            case 11:
+            case 12:
+            case 14:
+            case 15:
+            case 16:
+            case 17:
+            case 18:
+            case 20:
+            case 21:
+            case 22:
+            case 27:
+            case 28:
+            case 29:
+            case 30:
+            case 31:
+            case KEY_UP:
+            case KEY_DOWN:
+                break;
+            case 3:
+                //Reportes ctrl+c
+            {
+                string reportes = "Reportes: 1)Lista    2)Palabras Buscadas    3)Palabras Reemplazadas";
+                string reportes2 = "4)Log de Cambios    5)Lego de Reversiones";
+                mvprintw(y - 3, 1, reportes.c_str());
+                mvprintw(y-2, 1, reportes2.c_str());
+                refresh();
+                char opcion = getch();
+                switch (opcion) {
+                    case '1':
+                        listaCaracteres->generarGrafo();
+                        break;
+                    case '2':
+                        palabras->ordenarBuscadas();
+                        break;
+                    case '3':
+                        palabras->ordenarReemplazadas();
+                        break;
+                    case 4:
+                        cambios->generarGrafo();
+                        break;
+                    case 5:
+                        revertido->generarReversiones();
+                        break;
+                    default:
+                        break;
+                }
+                move(y-2, 0);
+                clrtoeol();
+                move(y-3, 0);
+                clrtoeol();
+                move(fila, columna);
+                refresh();
+                break;
+            }
+            case 8:
+            case 7:
+            case 127:
+                //borrar
+            {
+                if (columna > 1 && columna < x - 1) {
+                    listaCaracteres->eliminarUltimo();
+                    mvprintw(fila, columna - 1, " ");
+                    refresh();
+                    columna--;
+                    move(fila, columna);
+                    refresh();
+                } else if (columna == 1 && fila > 1) {
+                    listaCaracteres->eliminarUltimo();
+                    fila--;
+                    columna = x - 1;
+                    move(fila, columna);
+                }
+                break;
+            }
+            case 10: {
+                if (fila < (y - 2)) {
+                    //enter
+                    fila++;
+                    columna = 1;
+                    listaCaracteres->agregarFin(10);
+                    move(fila, columna);
+                    refresh();
+                    break;
+                }
+            }
+            case 19:
+                //ctrl + s
+                guardarArchivo();
+                break;
+            case 25:
+                //ctrl + Y
+                cambios->agregarCambio(revertido->sacarCambio());
+                break;
+            case 26:
+                revertido->agregarCambio(cambios->sacarCambio());
+                //ctrl + Z
+                break;
+            case 23:
+                //busqueda
+            {
+                for (int i = 0; i < listaCaracteres->getSize(); i++) {
+                    texto += listaCaracteres->getLetra(i);
+                }
+
+                string remplazo = "";
+                int posy = y - 2;
+                int posx = 29;
+                mvprintw(posy, 1, "Escriba palabra a remplazar:");
+                refresh();
+                while (1) {
+                    char letraR = getch();
+                    if (letraR == 24) {
+                        move(y - 2, 0);
+                        clrtoeol();
+                        move(fila, columna);
+                        break;
+                    } else if (letraR == 10) {
+                        string anterior = "";
+                        int i;
+                        for (i = 0; i < remplazo.length(); i++) {
+                            if (remplazo[i] == ';') {
+                                i++;
+                                break;
+                            } else {
+                                anterior += remplazo[i];
+                            }
+                        }
+                        string nuevaP = "";
+                        while (i < remplazo.length()) {
+                            nuevaP += remplazo[i];
+                            i++;
+                        }
+                        Cambio change(anterior,nuevaP,false,"",columna);
+                        cambios->agregarCambio(change);
+                        Palabras palabra(anterior, nuevaP);
+                        palabras->agregarFinal(palabra);
+                        searchReplace(texto, anterior, nuevaP);
+                        move(y - 2, 0);
+                        clrtoeol();
+                        move(fila, columna);
+                        listaCaracteres->limpiarLista();
+                        generarLista(texto);
+                        clear();
+                        box(stdscr, 0, 0);
+                        string instrucciones = "^w (Buscar y Remplazar)   ^c(Reportes)    ^s (Guardar)";
+                        refresh();
+                        mvprintw(y - 1, 12, instrucciones.c_str());
+                        fila = 1;
+                        columna = 1;
+                        for (int j = 0; j < listaCaracteres->getSize(); j++) {
+                            if (columna == x - 1) {
+                                fila++;
+                                columna = 1;
+                            }
+                            if (listaCaracteres->getLetra(j) == 10) {
+                                fila++;
+                                columna = 1;
+                                j++;
+                            }
+                            mvaddch(fila, columna, listaCaracteres->getLetra(j));
+                            columna++;
+                        }
+                        move(fila, columna);
+                        refresh();
+                        break;
+                    } else if (letraR == 8 || letraR == 7) {
+                        if (posx > 29 && posx < x - 1) {
+                            remplazo.erase(remplazo.length());
+                            mvprintw(posy, posx - 1, " ");
+                            refresh();
+                            posx--;
+                            move(posy, posx);
+                            refresh();
+                        }
+                    } else if (letraR > 19 && letraR < 126) {
+                        mvaddch(posy, posx, letraR);
+                        remplazo += letraR;
+                        posx++;
+                        refresh();
+                    }
+                }
+                texto = "";
+                break;
+            }
+            default:
+                if (columna == (x - 1)) {
+                    fila++;
+                    columna = 1;
+                    listaCaracteres->agregarFin(' ');
+                    move(fila, columna);
+                    refresh();
+                }
+                mvaddch(fila, columna, letra);
+                listaCaracteres->agregarFin(letra);
+                Cambio change("","",false,to_string(letra),columna);
+                cambios->agregarCambio(change);
+                columna++;
+                contCaracteres++;
+                refresh();
+                break;
+        }
+        refresh();
+    }
+
+    clear();
+    listaCaracteres->limpiarLista();
+    endwin();
+    menu();
+}
+
+void crearArchivo2(string text) {
+    ifstream fe(text);
+
+    string texto = "";
+    initscr();
+    noecho();
+    raw();
+    box(stdscr, 0, 0);
+
+    int y, x;
+    getmaxyx(stdscr, y, x);
+    keypad(stdscr, true);
+    string instrucciones = "^w (Buscar y Remplazar)   ^c(Reportes)    ^s (Guardar)";
+    refresh();
+    mvprintw(y - 1, 12, instrucciones.c_str());
+
+
+    int columna = 1;
+    int fila = 1;
+    string cadena ;
+    while(!fe.eof()){
+        fe >> cadena;
+        for(int i = 0;i<cadena.length();i++){
+            if(cadena[i] == 10){
+                fila++;
+                columna=1;
+                i++;
+            }
+            mvaddch(fila, columna, cadena[i]);
+            listaCaracteres->agregarFin(cadena[i]);
+            columna++;
+
+        }
+    }
+    fe.close();
 
     int contCaracteres = 0;
     move(fila, columna);
