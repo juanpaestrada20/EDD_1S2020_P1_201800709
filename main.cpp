@@ -3,6 +3,7 @@
 #include "ListaDobleEnlazada.h"
 #include "Pila.h"
 #include "ListaCircular.h"
+#include "ListaSimple.h"
 
 
 using namespace std;
@@ -13,9 +14,16 @@ void guardarArchivo();
 
 void menu();
 
+void searchReplace(string &texto, string search, string replace);
+
+void generarLista(string texto);
+
+void archivosRecientes();
+
 static ListaCircular *recientes = new ListaCircular();
 static Pila *cambios = new Pila();
 static ListaDobleEnlazada *listaCaracteres = new ListaDobleEnlazada();
+static ListaSimple *palabras = new ListaSimple();
 
 int main() {
     menu();
@@ -59,6 +67,10 @@ void menu() {
             clear();
             crearArchivo();
         }
+        if (option == '3') {
+            clear();
+            archivosRecientes();
+        }
         refresh();
     }
     delwin(menu);
@@ -66,6 +78,7 @@ void menu() {
 }
 
 void crearArchivo() {
+    string texto = "";
     initscr();
     noecho();
     raw();
@@ -118,9 +131,30 @@ void crearArchivo() {
                 break;
             case 3:
                 //Reportes ctrl+c
-                listaCaracteres->generarGrafo();
-                cambios->generarGrafo();
+            {
+                string reportes = "Reportes: 1)Lista    2)Palabras Buscadas    3)Palabras Reemplazadas";
+                mvprintw(y - 2, 1, reportes.c_str());
+                refresh();
+                char opcion = getch();
+                switch (opcion) {
+                    case '1':
+                        listaCaracteres->generarGrafo();
+                        break;
+                    case '2':
+                        palabras->ordenarBuscadas();
+                        break;
+                    case '3':
+                        palabras->ordenarReemplazadas();
+                        break;
+                    default:
+                        break;
+                }
+                move(y-2, 0);
+                clrtoeol();
+                move(fila, columna);
+                refresh();
                 break;
+            }
             case 8:
             case 7:
             case 127:
@@ -155,7 +189,6 @@ void crearArchivo() {
             case 19:
                 //ctrl + s
                 guardarArchivo();
-                listaCaracteres->limpiarLista();
                 break;
             case 25:
                 //ctrl + Y
@@ -166,6 +199,10 @@ void crearArchivo() {
             case 23:
                 //busqueda
             {
+                for (int i = 0; i < listaCaracteres->getSize(); i++) {
+                    texto += listaCaracteres->getLetra(i);
+                }
+
                 string remplazo = "";
                 int posy = y - 2;
                 int posx = 29;
@@ -194,17 +231,44 @@ void crearArchivo() {
                             nuevaP += remplazo[i];
                             i++;
                         }
+                        Palabras palabra(anterior, nuevaP);
+                        palabras->agregarFinal(palabra);
+                        searchReplace(texto, anterior, nuevaP);
                         move(y - 2, 0);
                         clrtoeol();
                         move(fila, columna);
-                        listaCaracteres->buscarPalabra(anterior, nuevaP);
+                        listaCaracteres->limpiarLista();
+                        generarLista(texto);
+                        clear();
+                        box(stdscr, 0, 0);
+                        string instrucciones = "^w (Buscar y Remplazar)   ^c(Reportes)    ^s (Guardar)";
+                        refresh();
+                        mvprintw(y - 1, 12, instrucciones.c_str());
+                        fila = 1;
+                        columna = 1;
+                        for (int j = 0; j < listaCaracteres->getSize(); j++) {
+                            if (columna == x - 1) {
+                                fila++;
+                                columna = 1;
+                            }
+                            if (listaCaracteres->getLetra(j) == 10) {
+                                fila++;
+                                columna = 1;
+                                j++;
+                            }
+                            mvaddch(fila, columna, listaCaracteres->getLetra(j));
+                            columna++;
+                        }
+                        move(fila, columna);
+                        refresh();
                         break;
-                    } else if (letraR == 8) {
+                    } else if (letraR == 8 || letraR == 7) {
                         if (posx > 29 && posx < x - 1) {
+                            remplazo.erase(remplazo.length());
                             mvprintw(posy, posx - 1, " ");
                             refresh();
                             posx--;
-                            move(fila, columna);
+                            move(posy, posx);
                             refresh();
                         }
                     } else if (letraR > 19 && letraR < 126) {
@@ -214,6 +278,7 @@ void crearArchivo() {
                         refresh();
                     }
                 }
+                texto = "";
                 break;
             }
             default:
@@ -247,8 +312,8 @@ void guardarArchivo() {
     int columna = 1;
     int y, x;
     getmaxyx(stdscr, y, x);
-    int fila = y-2;
-    move(fila+1, columna);
+    int fila = y - 2;
+    move(fila + 1, columna);
     clrtoeol();
     box(stdscr, 0, 0);
     bool fin = false;
@@ -262,16 +327,21 @@ void guardarArchivo() {
     while (1) {
         char letra = getch();
         if (letra == 24) {
+            move(y - 2, 0);
+            clrtoeol();
+            nombreArchivo = "";
             break;
         }
         switch (letra) {
-            case 0 -5:
+            case 0 - 5:
             case 6:
             case 9:
             case 11 - 23:
             case 25 - 31:
                 break;
-            case 7-8:
+            case 7:
+            case 8:
+            case 127:
                 //borrar
             {
                 if (columna > 29 && columna < x - 1) {
@@ -288,8 +358,9 @@ void guardarArchivo() {
                 //enter
                 if (nombreArchivo != "") {
                     nombreArchivo += ".txt";
+                    recientes->agregarInicio(nombreArchivo);
                     listaCaracteres->guardarArchivo(nombreArchivo);
-                    move(y-2, 0);
+                    move(y - 2, 0);
                     clrtoeol();
                     nombreArchivo = "";
                     fin = true;
@@ -298,14 +369,14 @@ void guardarArchivo() {
             default:
                 if (columna < x - 1) {
                     nombreArchivo += letra;
-                    mvaddch(fila, columna,letra);
+                    mvaddch(fila, columna, letra);
                     refresh();
                     columna++;
                 }
                 break;
         }
-        if(fin){
-            move(fila+1, columna);
+        if (fin) {
+            move(fila + 1, columna);
             clrtoeol();
             box(stdscr, 0, 0);
             string instrucciones2 = "^w (Buscar y Remplazar)   ^c(Reportes)    ^s (Guardar)";
@@ -313,5 +384,58 @@ void guardarArchivo() {
             refresh();
             break;
         }
+    }
+}
+
+void archivosRecientes() {
+    initscr();
+    noecho();
+    raw();
+    box(stdscr, 0, 0);
+
+    int y, x;
+    getmaxyx(stdscr, y, x);
+    keypad(stdscr, true);
+    string instrucciones = "^w (Buscar y Remplazar)   ^c(Reportes)    ^s (Guardar)";
+    refresh();
+    mvprintw(3, 10, "ARCHIVOS RECIENTES");
+    refresh();
+    int fila = 5;
+    int columna = 10;
+    string archivo;
+    for (int i = 0; i < recientes->getSize(); i++) {
+        archivo = to_string(i + 1) + ". " + recientes->getNombre(i) + "\t/home/juanpa/" + recientes->getNombre(i);
+        mvprintw(fila, columna, archivo.c_str());
+        fila++;
+        refresh();
+    }
+    mvprintw(y - 5, columna, "X. Generar Reporte de archivos");
+    while (1) {
+        char letra = getch();
+        if (letra == 24) {
+            break;
+        }
+        if (letra == 'x') {
+            recientes->generarGrafo();
+            break;
+        }
+        clear();
+        endwin();
+        menu();
+    }
+}
+
+void searchReplace(string &texto, string search, string replace) {
+    int pos = texto.find(search);
+    while (pos != -1) {
+        texto.replace(pos, search.size(), replace);
+        pos = texto.find(search, pos + replace.size());
+
+    }
+}
+
+void generarLista(string texto) {
+    for (char i : texto) {
+        listaCaracteres->agregarFin(i);
     }
 }

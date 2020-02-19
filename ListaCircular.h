@@ -6,13 +6,15 @@
 #define PRACTICA1_LISTACIRCULAR_H
 
 #include <string>
+
 using namespace std;
 
-class NodoC{
+class NodoC {
 public:
     string ruta;
     NodoC *next;
-    NodoC(string _ruta){
+
+    NodoC(string _ruta) {
         ruta = _ruta;
         next = NULL;
     }
@@ -24,34 +26,81 @@ private:
     NodoC *cola;
     int size;
 public:
-    ListaCircular(){
+    ListaCircular() {
         cabeza = NULL;
         cola = NULL;
         size = 0;
     }
-    bool isEmpty(){
-        return (cabeza == NULL);
-    }
-    void agregarInicio(string ruta){
-        NodoC *nuevo = new NodoC(ruta);
 
-        if(isEmpty())
-            return;
-        else if(cabeza == NULL){
+    bool isEmpty() {
+        return (size == 0);
+    }
+
+    int getSize(){
+        return size;
+    }
+
+    void agregarInicio(string ruta) {
+        NodoC *nuevo = new NodoC(ruta);
+        if (cabeza == NULL) {
             cabeza = nuevo;
-            cabeza->next=cabeza;
-        } else if(cabeza->next == cabeza){
+            cabeza->next = cabeza;
+        } else if (cabeza->next == cabeza) {
             cola = nuevo;
-            cabeza->next=cola;
-            cola->next=cabeza;
-        }else {
-            NodoC *aux = new NodoC(ruta);
+            cabeza->next = cola;
+            cola->next = cabeza;
+        } else {
 
             cola->next = nuevo;
             nuevo->next = cabeza;
-            cabeza = aux;
+            cola = nuevo;
         }
         size++;
+    }
+
+    void generarGrafo() {
+        if (!isEmpty()) {
+            int i;
+            int j;
+            NodoC *aux = cabeza;
+            ofstream fs("archivos.dot");
+            fs << "digraph G {" << endl;
+            fs << "rankdir = LR;" << endl;
+            fs << "node [margin=0 shape=oval style=filled ];" << endl;
+            if (size == 1) {
+                fs << "A1" << " [label=\"" << aux->ruta << "\"];" << endl;
+                fs << "A1" << " -> A1;" << endl;
+            }else{
+                for(i = 0; i < size; i++){
+                    fs << "A" << i+1 << " [label=\"" << aux->ruta << "\"];" << endl;
+                    aux = aux->next;
+                }
+                fs << endl;
+                aux = cabeza;
+                for (j = 1; j < size; j++) {
+                    fs << "A" << j << " -> A" << j + 1 << ";" << endl;
+                    aux = aux->next;
+                }
+                fs << "A" << size << " -> A1;" << endl;
+            }
+
+            fs << "}" << endl;
+            fs.close();
+
+            system("dot -Tpng archivos.dot -o archivos.png");
+            system("display archivos.png");
+        }
+    }
+    string getNombre(int pos){
+        if(cabeza != NULL){
+            NodoC *aux = cabeza;
+            for(int i = 0; i < pos; i++){
+                aux = aux->next;
+            }
+            return aux->ruta;
+        }else {
+            return "";
+        }
     }
 };
 

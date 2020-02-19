@@ -1,0 +1,10 @@
+digraph G {
+rankdir = LR;
+node [margin=0 shape=oval style=filled ];
+A1 [label="amigp reemplazo a: hola"];
+A2 [label="como reemplazo a: con"];
+C [label="null"];
+
+A1 -> A2;
+A2 -> C;
+}

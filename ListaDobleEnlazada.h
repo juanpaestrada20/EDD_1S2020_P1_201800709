@@ -163,7 +163,6 @@ public:
     void generarGrafo() {
         if (!isEmpty()) {
             Nodo *aux = cabeza;
-            char letras[size];
             ofstream fs("letras.dot");
             fs << "digraph G {" << endl;
             fs << "rankdir = LR;" << endl;
@@ -226,7 +225,7 @@ public:
     void guardarArchivo(string nombre){
         if (!isEmpty()) {
             Nodo *aux = cabeza;
-            ofstream fs(nombre);
+            ofstream fs("/home/juanpa/"+nombre);
             for (int i = 0; i < size; i++) {
                 if(aux->letra == 10){
                     fs << endl;
@@ -237,6 +236,15 @@ public:
             }
 
             fs.close();
+        }
+    }
+    char getLetra(int pos){
+        if(cabeza != NULL){
+            Nodo *aux = cabeza;
+            for(int j = 0; j < pos; j++){
+                aux = aux->next;
+            }
+            return aux->letra;
         }
     }
 };
