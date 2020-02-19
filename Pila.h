@@ -80,6 +80,70 @@ public:
     }
     void generarGrafo(){
         if(!isEmpty()){
+            int i = 1;
+            Pila aux = girarPila();
+            Pila aux3 = girarPila();
+            Cambio aux2;
+            Cambio aux4;
+            ofstream fs("cambios.dot");
+            fs << "digraph G {" << endl;
+            fs << "rankdir = DU;" << endl;
+            fs << "node [margin=0 shape=oval style=filled ];" << endl;
+            while (!aux.isEmpty()) {
+                aux2 = aux.sacarCambio();
+                fs << "A" << i  << " [label=\"Palabra Buscada: " << aux2.palabraBuscada << "\nReemplazada por: ";
+                fs << aux2.palabraReemplazada << "\nEstado: ";
+                if(!aux2.estado){
+                    fs << "No revertido";
+                }else{
+                    fs << "Revertido";
+                }
+                fs << "\nPalabra: " << aux2.palabra;
+                fs << "\nPosicion: " << aux2.posicion << "\"];" << endl;
+            }
+            fs  << endl;
+            for (int j = 1; j < size; j++) {
+                fs << "A" << j << " -> A" << j + 1 << ";" << endl;
+            }
+            fs << "}" << endl;
+            fs.close();
+
+            system("dot -Tpng cambios.dot -o cambios.png");
+            system("display cambios.png");
+        }
+    }
+    void generarReversiones(){
+        if(!isEmpty()) {
+            int i = 1;
+            Pila aux = girarPila();
+            Pila aux3 = girarPila();
+            Cambio aux2;
+            Cambio aux4;
+            ofstream fs("reversiones.dot");
+            fs << "digraph G {" << endl;
+            fs << "rankdir = DU;" << endl;
+            fs << "node [margin=0 shape=oval style=filled ];" << endl;
+            while (!aux.isEmpty()) {
+                aux2 = aux.sacarCambio();
+                fs << "A" << i << " [label=\"Palabra Buscada: " << aux2.palabraBuscada << "\nReemplazada por: ";
+                fs << aux2.palabraReemplazada << "\nEstado: ";
+                if (!aux2.estado) {
+                    fs << "No revertido";
+                } else {
+                    fs << "Revertido";
+                }
+                fs << "\nPalabra: " << aux2.palabra;
+                fs << "\nPosicion: " << aux2.posicion << "\"];" << endl;
+            }
+            fs << endl;
+            for (int j = 1; j < size; j++) {
+                fs << "A" << j << " -> A" << j + 1 << ";" << endl;
+            }
+            fs << "}" << endl;
+            fs.close();
+
+            system("dot -Tpng reversiones.dot -o reversiones.png");
+            system("display reversiones.png");
         }
     }
 };

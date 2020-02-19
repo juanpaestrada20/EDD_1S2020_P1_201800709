@@ -22,6 +22,7 @@ void archivosRecientes();
 
 static ListaCircular *recientes = new ListaCircular();
 static Pila *cambios = new Pila();
+static Pila *revertido = new Pila();
 static ListaDobleEnlazada *listaCaracteres = new ListaDobleEnlazada();
 static ListaSimple *palabras = new ListaSimple();
 
@@ -70,6 +71,9 @@ void menu() {
         if (option == '3') {
             clear();
             archivosRecientes();
+        }
+        if(option == '4'){
+            
         }
         refresh();
     }
@@ -133,7 +137,9 @@ void crearArchivo() {
                 //Reportes ctrl+c
             {
                 string reportes = "Reportes: 1)Lista    2)Palabras Buscadas    3)Palabras Reemplazadas";
-                mvprintw(y - 2, 1, reportes.c_str());
+                string reportes2 = "4)Log de Cambios    5)Lego de Reversiones";
+                mvprintw(y - 3, 1, reportes.c_str());
+                mvprintw(y-2, 1, reportes2.c_str());
                 refresh();
                 char opcion = getch();
                 switch (opcion) {
@@ -146,10 +152,18 @@ void crearArchivo() {
                     case '3':
                         palabras->ordenarReemplazadas();
                         break;
+                    case 4:
+                        cambios->generarGrafo();
+                        break;
+                    case 5:
+                        revertido->generarReversiones();
+                        break;
                     default:
                         break;
                 }
                 move(y-2, 0);
+                clrtoeol();
+                move(y-3, 0);
                 clrtoeol();
                 move(fila, columna);
                 refresh();
@@ -192,8 +206,10 @@ void crearArchivo() {
                 break;
             case 25:
                 //ctrl + Y
+                cambios->agregarCambio(revertido->sacarCambio());
                 break;
             case 26:
+                revertido->agregarCambio(cambios->sacarCambio());
                 //ctrl + Z
                 break;
             case 23:
@@ -231,6 +247,8 @@ void crearArchivo() {
                             nuevaP += remplazo[i];
                             i++;
                         }
+                        Cambio change(anterior,nuevaP,false,"",columna);
+                        cambios->agregarCambio(change);
                         Palabras palabra(anterior, nuevaP);
                         palabras->agregarFinal(palabra);
                         searchReplace(texto, anterior, nuevaP);
@@ -291,7 +309,8 @@ void crearArchivo() {
                 }
                 mvaddch(fila, columna, letra);
                 listaCaracteres->agregarFin(letra);
-                cambios->agregarCambio(*new Cambio("", "", false, "", contCaracteres));
+                Cambio change("","",false,to_string(letra),columna);
+                cambios->agregarCambio(change);
                 columna++;
                 contCaracteres++;
                 refresh();
