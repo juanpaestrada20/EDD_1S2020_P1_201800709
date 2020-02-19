@@ -163,7 +163,6 @@ public:
     void generarGrafo() {
         if (!isEmpty()) {
             Nodo *aux = cabeza;
-            char letras[size];
             ofstream fs("letras.dot");
             fs << "digraph G {" << endl;
             fs << "rankdir = LR;" << endl;
@@ -237,6 +236,15 @@ public:
             }
 
             fs.close();
+        }
+    }
+    char getLetra(int pos){
+        if(cabeza != NULL){
+            Nodo *aux = cabeza;
+            for(int j = 0; j < pos; j++){
+                aux = aux->next;
+            }
+            return aux->letra;
         }
     }
 };

@@ -36,6 +36,10 @@ public:
         return (size == 0);
     }
 
+    int getSize(){
+        return size;
+    }
+
     void agregarInicio(string ruta) {
         NodoC *nuevo = new NodoC(ruta);
         if (cabeza == NULL) {
@@ -85,6 +89,17 @@ public:
 
             system("dot -Tpng archivos.dot -o archivos.png");
             system("display archivos.png");
+        }
+    }
+    string getNombre(int pos){
+        if(cabeza != NULL){
+            NodoC *aux = cabeza;
+            for(int i = 0; i < pos; i++){
+                aux = aux->next;
+            }
+            return aux->ruta;
+        }else {
+            return "";
         }
     }
 };

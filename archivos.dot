@@ -2,10 +2,5 @@ digraph G {
 rankdir = LR;
 node [margin=0 shape=oval style=filled ];
 A1 [label="uno.txt"];
-A2 [label="dos.txt"];
-A3 [label="tres.txt"];
-
-A1 -> A2;
-A2 -> A3;
-A3 -> A1;
+A1 -> A1;
 }
